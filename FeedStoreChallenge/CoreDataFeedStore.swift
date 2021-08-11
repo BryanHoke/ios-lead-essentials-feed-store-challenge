@@ -53,6 +53,7 @@ public final class CoreDataFeedStore: FeedStore {
 				try context.save()
 				completion(nil)
 			} catch {
+				try? ManagedCache.find(in: context).map(context.delete)
 				completion(error)
 			}
 		}

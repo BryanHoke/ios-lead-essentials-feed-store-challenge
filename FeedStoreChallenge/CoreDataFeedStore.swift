@@ -26,6 +26,7 @@ public final class CoreDataFeedStore: FeedStore {
 			url: storeURL
 		)
 		context = container.newBackgroundContext()
+		context.undoManager = UndoManager()
 	}
 
 	public func retrieve(completion: @escaping RetrievalCompletion) {
@@ -66,6 +67,7 @@ public final class CoreDataFeedStore: FeedStore {
 				try ManagedCache.deleteCache(in: context)
 				completion(nil)
 			} catch {
+				context.rollback()
 				completion(error)
 			}
 		}

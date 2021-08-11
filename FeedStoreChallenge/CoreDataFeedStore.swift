@@ -34,11 +34,7 @@ public final class CoreDataFeedStore: FeedStore {
 			do {
 				let request = NSFetchRequest<ManagedCache>(entityName: ManagedCache.entity().name!)
 				if let cache = try context.fetch(request).first {
-					completion(.found(
-						feed: cache.feed
-							.compactMap { $0 as? ManagedFeedImage }
-							.map(\.local),
-						timestamp: cache.timestamp))
+					completion(.found(feed: cache.localFeed, timestamp: cache.timestamp))
 				} else {
 					completion(.empty)
 				}
@@ -74,6 +70,10 @@ extension NSPersistentContainer {}
 private class ManagedCache: NSManagedObject {
 	@NSManaged var timestamp: Date
 	@NSManaged var feed: NSOrderedSet
+
+	var localFeed: [LocalFeedImage] {
+		feed.compactMap { ($0 as? ManagedFeedImage)?.local }
+	}
 }
 
 @objc(ManagedFeedImage)

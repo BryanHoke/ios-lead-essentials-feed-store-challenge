@@ -53,7 +53,7 @@ public final class CoreDataFeedStore: FeedStore {
 				try context.save()
 				completion(nil)
 			} catch {
-				try? ManagedCache.find(in: context).map(context.delete)
+				try? ManagedCache.deleteCache(in: context)
 				completion(error)
 			}
 		}
@@ -76,8 +76,12 @@ private class ManagedCache: NSManagedObject {
 		return try context.fetch(request).first
 	}
 
-	static func newUniqueInstance(in context: NSManagedObjectContext) throws -> ManagedCache {
+	static func deleteCache(in context: NSManagedObjectContext) throws {
 		try find(in: context).map(context.delete)
+	}
+
+	static func newUniqueInstance(in context: NSManagedObjectContext) throws -> ManagedCache {
+		try deleteCache(in: context)
 		return ManagedCache(context: context)
 	}
 

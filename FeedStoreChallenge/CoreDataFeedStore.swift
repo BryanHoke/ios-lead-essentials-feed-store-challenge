@@ -26,7 +26,6 @@ public final class CoreDataFeedStore {
 			url: storeURL
 		)
 		context = container.newBackgroundContext()
-		context.undoManager = UndoManager()
 	}
 }
 

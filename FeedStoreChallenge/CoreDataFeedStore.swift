@@ -63,6 +63,7 @@ extension CoreDataFeedStore: FeedStore {
 		context.perform { [context] in
 			do {
 				try ManagedCache.deleteCache(in: context)
+				try context.save()
 				completion(nil)
 			} catch {
 				context.rollback()

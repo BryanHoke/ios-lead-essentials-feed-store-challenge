@@ -20,6 +20,7 @@ extension ManagedCache {
 			return nil
 		}
 		let request = NSFetchRequest<ManagedCache>(entityName: entityName)
+		request.returnsObjectsAsFaults = false
 		return try context.fetch(request).first
 	}
 
